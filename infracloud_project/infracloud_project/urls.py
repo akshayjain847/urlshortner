@@ -19,6 +19,10 @@ from urlshortner import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('geturl/<str:original_url>/', views.shorten_url)
+    path('geturl/<str:original_url>/', views.shorten_url),
+    path('geturlnext/<str:original_url>/', views.shorten_url_next),
     
 ]
+
+dict_hash = {}
+max_id = 0

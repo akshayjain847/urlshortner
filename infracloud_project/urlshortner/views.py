@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from urlshortner.models import UrlData, MaxStoreid
 from django.core.exceptions import ObjectDoesNotExist
-
+from infracloud_project import urls
 
 @api_view(['GET'])
 def shorten_url(request, original_url):
@@ -42,3 +42,15 @@ def encode(id):
         ret.append(characters[val])
         id = id // base ## quotient
     return "".join(ret[::-1])
+
+@api_view(['GET'])
+def shorten_url_next(request, original_url):
+    if original_url in urls.dict_hash:
+        data = {"shorten_url" : "tobedone/"  + str(urls.dict_hash[original_url])}
+        return Response(data)
+    max_id_given = urls.max_id
+    id_to_allocate = encode(max_id_given+1)
+    urls.max_id = urls.max_id + 1
+    urls.dict_hash[original_url] = id_to_allocate
+    data = {"shorten_url" : "tobedone/"  + str(urls.dict_hash[original_url])}
+    return Response(data)
